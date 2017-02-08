@@ -60,6 +60,7 @@ public class myresult extends AppCompatActivity {
             thread.start();
         //View vg = findViewById (R.id.activity_myresult);
         //vg.invalidate();
+        //Tospaa made this.
 
         String[] mobileArray = {"Android","IPhone","WindowsMobile","Blackberry",
                 "WebOS","Ubuntu","Windows7","Max OS X"};
