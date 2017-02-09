@@ -1,54 +1,43 @@
 package com.example.emrea.hello;
 
-import android.content.Context;
+import android.app.Activity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
+import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
+import com.squareup.picasso.Picasso;
 
-/**
- * Created by emrea on 29/01/2017.
- */
+public class RecipeAdapter extends ArrayAdapter<String> {
 
-public class RecipeAdapter extends BaseAdapter {
-    private Context mContext;
-    private LayoutInflater mInflater;
-    private ArrayList<String> mDataSource;
+    private final Activity context;
+    private final String[] itemname;
+    //private final Integer[] imgid;
 
-    public RecipeAdapter(Context context, ArrayList<String> items) {
-        mContext = context;
-        mDataSource = items;
-        mInflater = (LayoutInflater) mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-    }
-    //1
-    @Override
-    public int getCount() {
-        return mDataSource.size();
+    public RecipeAdapter(Activity context, String[] itemname) {
+        super(context, R.layout.listview, itemname);
+        // TODO Auto-generated constructor stub
+
+        this.context=context;
+        this.itemname=itemname;
+        //this.imgid=imgid;
     }
 
-    //2
-    @Override
-    public Object getItem(int position) {
-        return mDataSource.get(position);
-    }
+    public View getView(int position,View view,ViewGroup parent) {
+        LayoutInflater inflater=context.getLayoutInflater();
+        View rowView=inflater.inflate(R.layout.listview, null,true);
 
-    //3
-    @Override
-    public long getItemId(int position) {
-        return position;
-    }
+        TextView txtTitle = (TextView) rowView.findViewById(R.id.item);
+        ImageView imageView = (ImageView) rowView.findViewById(R.id.icon);
+        TextView extratxt = (TextView) rowView.findViewById(R.id.textView1);
 
-    //4
-    @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Get view for row item
-        View rowView = mInflater.inflate(R.layout.activity_myresult, parent, false);
-        // Get title element
-        TextView titleTextView =
-                (TextView) rowView.findViewById(R.id.textview);
+        txtTitle.setText(itemname[position]);
+        //imageView.setImageResource(imgid[position]);
+        Picasso.with(context).load("https://i.scdn.co/image/f952cce40f47e2571f7e0f918b56395612ed2843").into(imageView);
+        extratxt.setText("Description "+itemname[position]);
         return rowView;
-    }
+
+    };
 }

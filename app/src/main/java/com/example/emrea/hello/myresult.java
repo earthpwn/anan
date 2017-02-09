@@ -63,10 +63,12 @@ public class myresult extends AppCompatActivity {
 
         String[] mobileArray = {"Android","IPhone","WindowsMobile","Blackberry",
                 "WebOS","Ubuntu","Windows7","Max OS X"};
-        ArrayAdapter adapter = new ArrayAdapter<String>(this,
-                R.layout.listview, mobileArray);
+
+        RecipeAdapter adapter = new RecipeAdapter(this,
+                mobileArray);
 
         ListView listView = (ListView) findViewById(R.id.liste);
         listView.setAdapter(adapter);
+
     }
 }
