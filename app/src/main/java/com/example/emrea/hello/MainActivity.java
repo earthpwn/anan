@@ -27,7 +27,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
 
-
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -232,14 +231,18 @@ public class MainActivity extends AppCompatActivity implements
 
                     result2 = sb2.toString();
                     //System.out.println(result2);
-                    JSONObject jsonresult = new JSONObject(result2);
+                    /*JSONObject jsonresult = new JSONObject(result2);
                     JSONObject jsonartist = jsonresult.getJSONObject("artists");
                     JSONArray jsonitems = jsonartist.getJSONArray("items");
                     JSONObject jsonitem = jsonitems.getJSONObject(0);
                     JSONArray jsonimage = jsonitem.getJSONArray("images");
                     JSONObject jsonalbumimage = jsonimage.getJSONObject(2);
-                    imageurl = jsonalbumimage.getString("url");
+                    imageurl = jsonalbumimage.getString("url");*/
+                    Parsing parser = new Parsing();
+                    imageurl = parser.getImageURL(result2);
                     System.out.println(imageurl);
+
+
 
                     System.out.println (urlConnection.getResponseCode());
                     System.out.println (urlConnection.getResponseMessage());
