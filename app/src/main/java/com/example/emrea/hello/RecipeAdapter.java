@@ -14,15 +14,15 @@ public class RecipeAdapter extends ArrayAdapter<String> {
 
     private final Activity context;
     private final String[] itemname;
-    //private final Integer[] imgid;
+    private final String[] imgurl;
 
-    public RecipeAdapter(Activity context, String[] itemname) {
+    public RecipeAdapter(Activity context, String[] itemname, String[] imgurl) {
         super(context, R.layout.listview, itemname);
         // TODO Auto-generated constructor stub
 
         this.context=context;
         this.itemname=itemname;
-        //this.imgid=imgid;
+        this.imgurl=imgurl;
     }
 
     public View getView(int position,View view,ViewGroup parent) {
@@ -35,7 +35,7 @@ public class RecipeAdapter extends ArrayAdapter<String> {
 
         txtTitle.setText(itemname[position]);
         //imageView.setImageResource(imgid[position]);
-        Picasso.with(context).load("https://i.scdn.co/image/f952cce40f47e2571f7e0f918b56395612ed2843").into(imageView);
+        Picasso.with(context).load(imgurl[position]).into(imageView);
         extratxt.setText("Description "+itemname[position]);
         return rowView;
 
