@@ -1,6 +1,7 @@
 package com.example.emrea.hello;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -26,7 +27,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.json.JSONTokener;
-
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -55,18 +55,16 @@ import com.spotify.sdk.android.player.SpotifyPlayer;
 public class MainActivity extends AppCompatActivity implements
         SpotifyPlayer.NotificationCallback, ConnectionStateCallback
 {
-    String imageurl = null;
-    public String getimg(){
-        return imageurl;
-    }
+    String result = null;
+    String result2 = "";
     // TODO: Replace with your client ID
     private static final String CLIENT_ID = "8d37a54bb27f446c915f3395cc1c9f4c";
     // TODO: Replace with your redirect URI
     private static final String REDIRECT_URI = "mycustomprotocol://callback";
     private static final String CLIENT_SECRET = "1e848a4467654d7292ae9a7c4858df5b";
-    EditText emailText;
-    TextView responseView;
-    ProgressBar progressBar;
+    EditText searchText;
+    String searchWord;
+
     private Player mPlayer;
     String token = "";
     String kod = "";
@@ -77,66 +75,85 @@ public class MainActivity extends AppCompatActivity implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        responseView = (TextView) findViewById(R.id.responseView);
-        emailText = (EditText) findViewById(R.id.editText);
-        progressBar = (ProgressBar) findViewById(R.id.progressBar);
-        /*AuthenticationRequest.Builder builder = new AuthenticationRequest.Builder(CLIENT_ID,
-                AuthenticationResponse.Type.TOKEN,
-                REDIRECT_URI);
-        builder.setScopes(new String[]{"user-read-private", "playlist-modify-private"});
-        AuthenticationRequest request = builder.build();*/
+        searchText = (EditText) findViewById(R.id.editText);
 
-        /*
-        //authentication
-        AuthenticationRequest request = new AuthenticationRequest.Builder(CLIENT_ID, AuthenticationResponse.Type.CODE, REDIRECT_URI)
-                .setScopes(new String[]{"user-read-private", "playlist-modify-public", "playlist-modify-private","playlist-read-collaborative"})
-                .build();
-        AuthenticationClient.openLoginActivity(this, REQUEST_CODE, request);*/
 
-        Button button = (Button) findViewById(R.id.button);
+
+        final Button button = (Button) findViewById(R.id.button);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new RetrieveFeedTask().execute();
+                new onButtonClick().execute();
             }
         });
     }
 
-    public void setImage (String url){
-        try{
-            ImageView i = (ImageView)findViewById(R.id.imageView);
-            Bitmap bmp = BitmapFactory.decodeStream((InputStream)new URL (url).getContent());
-            i.setImageBitmap(bmp);
+    //this class is executed instead of class below
+    class onButtonClick extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected void onPreExecute(){
+
         }
 
-        catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        @Override
+        protected Void doInBackground(Void... param){
+            Login log = new Login();
+            try {
+                token = log.getToken();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void param){
+            //searchWord = searchText.getText().toString();  //This will be handled later
+            searchWord = "Machine";
+            Intent nextScreen = new Intent(MainActivity.this, myresult.class);
+            nextScreen.putExtra("token",token);
+            nextScreen.putExtra("search", searchWord);
+            startActivity(nextScreen);
         }
     }
 
-    class RetrieveFeedTask extends AsyncTask<String, Void, String> {
+    //This class is not executed anymore...
+    class RetrieveFeedTask extends AsyncTask<Void, Void, Void> {
 
         private Exception exception;
         Bitmap bmp = null;
-        public String getimg(){
-            return imageurl;
-        }
+
         protected void onPreExecute() {
-            progressBar.setVisibility(View.VISIBLE);
-            responseView.setText("");
+
+
+
         }
-        String email = emailText.getText().toString();
 
-        protected String doInBackground(String... strings) {
+
+
+        protected Void doInBackground(Void... strings) {
             // Do some validation here
-
-
-
-
+            Login log = new Login();
             try {
-                URL nurl = new URL("https://api.spotify.com/v1/search?q=Opeth&type=artist");
+                token = log.getToken();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Search mysearch = new Search();
+            try {
+                result = mysearch.searchArtist(token, "Machine");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            /*Intent nextScreen = new Intent(MainActivity.this, myresult.class);
+            nextScreen.putExtra("result",result);
+            //nextScreen.putExtra("result", result2);
+            startActivity(nextScreen);*/
+            return null;
+            //try {
+            //+
+                /*URL nurl = new URL("https://api.spotify.com/v1/search?q=Machine&type=artist&limit=50");
                 URL url = new URL("https://accounts.spotify.com/api/token" +
                         "?grant_type=refresh_token" +
                         "&refresh_token=" + reftok +
@@ -149,12 +166,15 @@ public class MainActivity extends AppCompatActivity implements
                 BufferedReader in2 = null;
                 BufferedWriter out = null;
                 String result = "";
-                String result2 = "";
+
 
                 try {
 
                     urlConnection.setDoInput(true);
-                    urlConnection.setDoOutput(true);
+                    urlConnection.setDoOutput(true);*/
+
+
+
                     //urlConnection.setRequestMethod("POST");
 
                     //urlConnection.setChunkedStreamingMode(0);
@@ -182,7 +202,9 @@ public class MainActivity extends AppCompatActivity implements
 
                     out.flush();*/
                     //out.close();
-                    urlConnection.connect();
+
+                //+
+                    /*urlConnection.connect();
                     in = new BufferedReader(new InputStreamReader(
                             urlConnection.getInputStream()));
 
@@ -193,7 +215,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
                     result = sb.toString();
-                    System.out.println(result);
+                    System.out.println(result);*/
 
                     /*
                     //getting image url from search result
@@ -212,6 +234,8 @@ public class MainActivity extends AppCompatActivity implements
                     reftok = jresult.getString("refresh_token");
                     System.out.println("ananın tokenı" + reftok);*/
 
+            //+
+                /*
                     //get token
                     JSONObject jresult = new JSONObject(result);
                     token = jresult.getString("access_token");
@@ -230,21 +254,32 @@ public class MainActivity extends AppCompatActivity implements
                         sb2.append(line2 + "\n");
 
 
-                    result2 = sb2.toString();
+                    result2 = sb2.toString();*/
+
+
                     //System.out.println(result2);
-                    JSONObject jsonresult = new JSONObject(result2);
+                    /*JSONObject jsonresult = new JSONObject(result2);
                     JSONObject jsonartist = jsonresult.getJSONObject("artists");
                     JSONArray jsonitems = jsonartist.getJSONArray("items");
                     JSONObject jsonitem = jsonitems.getJSONObject(0);
                     JSONArray jsonimage = jsonitem.getJSONArray("images");
                     JSONObject jsonalbumimage = jsonimage.getJSONObject(2);
-                    imageurl = jsonalbumimage.getString("url");
-                    System.out.println(imageurl);
+                    imageurl = jsonalbumimage.getString("url");*/
+
+            //+
+                /*
+                    Parsing parser = new Parsing();
+                    imageurl = parser.getImageURL(result2);
+                    for(int i = 0; i < imageurl.length; i++){
+                        System.out.println(imageurl[i]);
+                    }
+
+
 
                     System.out.println (urlConnection.getResponseCode());
-                    System.out.println (urlConnection.getResponseMessage());
+                    System.out.println (urlConnection.getResponseMessage());*/
 
-                    return null;
+
                     /*BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                     StringBuilder stringBuilder = new StringBuilder();
                     String line;
@@ -253,25 +288,25 @@ public class MainActivity extends AppCompatActivity implements
                     }
                     bufferedReader.close();
                     return stringBuilder.toString();*/
-                } finally {
+                //} finally {
                     //out.close();
-                    in.close();
-                    urlConnection.disconnect();
-                }
-            } catch (Exception e) {
+                    //in.close();
+                    //urlConnection.disconnect();
+                //}
+            } /*catch (Exception e) {
                 Log.e("ERROR", e.getMessage(), e);
                 return null;
-            }
-        }
+            }*/
 
-        protected void onPostExecute(String response) {
-            if (response == null) {
-                response = "THERE WAS AN ERROR";
-            }
+
+        protected void onPostExecute(Void response) {
+
 
             Intent nextScreen = new Intent(MainActivity.this, myresult.class);
-            nextScreen.putExtra("imagelink",imageurl);
+            nextScreen.putExtra("result", result);
+            //nextScreen.putExtra("result", result2);
             startActivity(nextScreen);
+
             /*Thread thread = new Thread(new Runnable() {
             ImageView i = null;
 
@@ -300,10 +335,9 @@ public class MainActivity extends AppCompatActivity implements
             thread.start();*/
 
 
-
             //yolo
-            progressBar.setVisibility(View.GONE);
         }
+
     }
 
 
