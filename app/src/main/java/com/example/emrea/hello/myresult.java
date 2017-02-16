@@ -137,7 +137,7 @@ public class myresult extends AppCompatActivity {
                 imageurl = parser.getImageURLofArtistSearch(result);
                 artistname = parser.getArtistNameOfArtistSearch(result);
                 artistID = parser.getArtistIDOfArtisSearch(result);
-////
+//////
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
