@@ -132,11 +132,14 @@ public class myresult extends AppCompatActivity {
                 Search newSearch = new Search();
                 result = newSearch.searchArtist(token, searchWord);
 
+
                 //Parse result
                 Parsing parser = new Parsing();
-                imageurl = parser.getImageURLofArtistSearch(result);
+                imageurl = parser.getImageURLOfArtistSearch(result);
                 artistname = parser.getArtistNameOfArtistSearch(result);
-                artistID = parser.getArtistIDOfArtisSearch(result);
+                artistID = parser.getArtistIDOfArtistSearch(result);
+
+
 //////
             } catch (IOException e) {
                 e.printStackTrace();

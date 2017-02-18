@@ -9,7 +9,7 @@ import org.json.JSONObject;
 
 public class Parsing {
 
-    String[] getImageURLofArtistSearch (String result) throws JSONException {
+    String[] getImageURLOfArtistSearch (String result) throws JSONException {
 
         int total = 0;
         JSONObject jsonresult = new JSONObject(result);
@@ -60,7 +60,7 @@ public class Parsing {
         return artistname;
     }
 
-    String[] getArtistIDOfArtisSearch (String result) throws JSONException {
+    String[] getArtistIDOfArtistSearch (String result) throws JSONException {
         int total = 0;
         JSONObject jsonresult = new JSONObject(result);
         total = jsonresult
@@ -77,7 +77,7 @@ public class Parsing {
         return artistID;
     }
 
-    String[] getAlbumImageURLOfAlbumSearch (String result) throws JSONException {
+    String[] getAlbumImageURLOfAlbumSearchviaArtistID (String result) throws JSONException {
         int total = 0;
         JSONObject jsonresult = new JSONObject(result);
         total = jsonresult
@@ -104,7 +104,7 @@ public class Parsing {
         return imageurl;
     }
 
-    String[] getAlbumNameOfAlbumSearch (String result) throws JSONException {
+    String[] getAlbumNameOfAlbumSearchviaArtistID (String result) throws JSONException {
         int total = 0;
         JSONObject jsonresult = new JSONObject(result);
         total = jsonresult
@@ -117,5 +117,69 @@ public class Parsing {
                     .getString("name");
         }
         return albumname;
+    }
+
+    String[] getAlbumImageURLOfAlbumSearch (String result) throws JSONException {
+        int total = 0;
+        JSONObject jsonresult = new JSONObject(result);
+        total = jsonresult
+                .getJSONObject("albums")
+                .getInt("total");
+        String[] albumImageURL = new String[50];
+        for (int i = 0; i < 50; i++){
+            int arr = jsonresult
+                    .getJSONObject("albums")
+                    .getJSONArray("items")
+                    .getJSONObject(i)
+                    .getJSONArray("images")
+                    .length();
+            if (arr > 0){
+                albumImageURL[i] = jsonresult
+                        .getJSONObject("albums")
+                        .getJSONArray("items")
+                        .getJSONObject(i)
+                        .getJSONArray("images")
+                        .getJSONObject(arr - 1)
+                        .getString("url");
+            }
+            else  { albumImageURL[i] = null; }
+        }
+        return albumImageURL;
+    }
+
+    String[] getAlbumNameOfAlbumSearch (String result) throws JSONException {
+        int total = 0;
+        JSONObject jsonresult = new JSONObject(result);
+        total = jsonresult
+                .getJSONObject("albums")
+                .getInt("total");
+        String[] albumName = new String[50];
+        for (int i = 0; i < 50; i++){
+            albumName[i] = jsonresult
+                    .getJSONObject("albums")
+                    .getJSONArray("items")
+                    .getJSONObject(i)
+                    .getString("name");
+        }
+
+        return albumName;
+    }
+
+    String[] getAlbumIDOfAlbumSearch (String result) throws JSONException {
+        int total = 0;
+        JSONObject jsonresult = new JSONObject(result);
+        total = jsonresult
+                .getJSONObject("albums")
+                .getInt("total");
+        String[] albumID = new String[50];
+        for (int i = 0; i < 50; i++){
+            albumID[i] = jsonresult
+                    .getJSONObject("albums")
+                    .getJSONArray("items")
+                    .getJSONObject(i)
+                    .getString("id");
+        }
+
+        return albumID;
     }
 }
