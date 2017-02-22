@@ -21,7 +21,8 @@
         android:name="com.spotify.sdk.android.authentication.LoginActivity"
         android:theme="@android:style/Theme.Translucent.NoTitleBar"/>
         <activity android:name=".myresult" />
-        <activity android:name=".AlbumResult"></activity>
+        <activity android:name=".AlbumResult" />
+        <activity android:name=".TrackResult"></activity>
     </application>
 
 </manifest>

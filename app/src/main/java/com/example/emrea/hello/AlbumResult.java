@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.json.JSONException;
@@ -12,6 +14,8 @@ import java.io.IOException;
 
 public class AlbumResult extends AppCompatActivity {
 
+    String token;
+    String[] albumID =  {};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,12 +48,14 @@ public class AlbumResult extends AppCompatActivity {
                 Parsing parser = new Parsing();
                 imageurl = parser.getAlbumImageURLOfAlbumSearch(result);
                 albumname = parser.getAlbumNameOfAlbumSearch(result);
+                albumID = parser.getAlbumIDOfAlbumSearchviaArtistID(result);
 
             } catch (IOException e) {
                 e.printStackTrace();
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+
             return null;
         }
 
@@ -60,6 +66,16 @@ public class AlbumResult extends AppCompatActivity {
 
             ListView listView = (ListView) findViewById(R.id.liste);
             listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView parent, View v, int position, long id){
+                    Intent nextScreen = new Intent(AlbumResult.this, TrackResult.class);
+                    nextScreen.putExtra("token",token);
+                    nextScreen.putExtra("id",albumID[position]);
+                    startActivity(nextScreen);
+                }
+            });
         }
     }
+
+
 }

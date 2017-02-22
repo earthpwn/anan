@@ -118,4 +118,36 @@ public class Parsing {
         }
         return albumname;
     }
+
+    String[] getTrackNameOfTrackSearchviaAlbumID (String result) throws JSONException {
+        int total = 0;
+        JSONObject jsonresult = new JSONObject(result);
+        total = jsonresult
+                .getInt("total");
+        String[] trackname = new String[50];
+        for (int i = 0; i < 50; i++){
+            trackname[i] = jsonresult
+                    .getJSONArray("items")
+                    .getJSONObject(i)
+                    .getString("name");
+        }
+        return trackname;
+    }
+
+    String[] getAlbumIDOfAlbumSearchviaArtistID (String result) throws JSONException {
+        int total = 0;
+        JSONObject jsonresult = new JSONObject(result);
+        total = jsonresult
+                .getInt("total");
+        String[] albumname = new String[5];
+        for (int i = 0; i < 5; i++){
+            albumname[i] = jsonresult
+                    .getJSONArray("items")
+                    .getJSONObject(i)
+                    .getString("id");
+        }
+        return albumname;
+
+
+}
 }

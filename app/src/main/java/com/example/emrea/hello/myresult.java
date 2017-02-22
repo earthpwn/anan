@@ -114,13 +114,14 @@ public class myresult extends AppCompatActivity {
     class getSearchResults extends AsyncTask<Void, Void, Void> {
         String[] imageurl = {};
         String[] artistname = {};
+
         @Override
-        protected void onPreExecute(){
+        protected void onPreExecute() {
 
         }
 
         @Override
-        protected Void doInBackground(Void... param){
+        protected Void doInBackground(Void... param) {
             try {
                 //get passed variables
                 Intent in = getIntent();
