@@ -133,11 +133,13 @@ public class myresult extends AppCompatActivity {
                 result = newSearch.searchArtist(token, searchWord);
 
 
+
                 //Parse result
                 Parsing parser = new Parsing();
                 imageurl = parser.getImageURLOfArtistSearch(result);
                 artistname = parser.getArtistNameOfArtistSearch(result);
                 artistID = parser.getArtistIDOfArtistSearch(result);
+
 
 
 //////
@@ -159,6 +161,7 @@ public class myresult extends AppCompatActivity {
                 public void onItemClick(AdapterView parent, View v, int position, long id){
                     Intent nextScreen = new Intent(myresult.this, AlbumResult.class);
                     nextScreen.putExtra("token",token);
+                    nextScreen.putExtra("searchType","id");
                     nextScreen.putExtra("id", artistID[position]);
                     startActivity(nextScreen);
                 }

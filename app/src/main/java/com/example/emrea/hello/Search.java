@@ -1,5 +1,7 @@
 package com.example.emrea.hello;
 
+import android.util.Log;
+
 import org.json.JSONException;
 
 import java.io.BufferedReader;
@@ -126,4 +128,74 @@ public class Search {
         }
         return result;
     }
+
+    String searchTrack(String token, String keyword) throws IOException {
+        String result ="";
+
+        URL url = new URL("https://api.spotify.com/v1/search?q=" + keyword + "&type=track&limit=50");
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        BufferedReader in = null;
+        try{
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(false);
+            urlConnection.setRequestProperty("Accept", "application/json");
+            urlConnection.setRequestProperty("Authorization", "Bearer " + token);
+            urlConnection.connect();
+
+            in = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = in.readLine()) != null)
+                sb.append(line + "\n");
+
+            result = sb.toString();
+
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            in.close();
+            urlConnection.disconnect();
+        }
+        return result;
+    }
+
+    String getTrackOfArtistviaAlbumID (String token, String id) throws IOException {
+        String result = "";
+
+        URL url = new URL("https://api.spotify.com/v1/albums/" + id + "/tracks");
+        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
+        BufferedReader in = null;
+        // TODO: try catch icine al
+        try {
+            urlConnection.setDoInput(true);
+            urlConnection.setDoOutput(false);
+            urlConnection.setRequestProperty("Accept", "application/json");
+            urlConnection.setRequestProperty("Authorization", "Bearer " + token);
+            urlConnection.connect();
+
+            in = new BufferedReader(new InputStreamReader(
+                    urlConnection.getInputStream()));
+
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = in.readLine()) != null)
+                sb.append(line + "\n");
+
+            result = sb.toString();
+
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } finally {
+                in.close();
+                urlConnection.disconnect();
+            }
+        return result;
+    }
+
 }

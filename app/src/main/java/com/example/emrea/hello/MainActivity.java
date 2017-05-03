@@ -18,6 +18,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.net.Uri;
 import org.apache.http.client.HttpClient;
@@ -52,19 +53,36 @@ import com.spotify.sdk.android.player.PlayerEvent;
 import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
+// HIGH PRIORITY TODOs
+// TODO: Selected tracks is not added to playlist
+// TODO: Images of tracks are not displayed. This is an repentance todo from TrackResult class. 'AlbumResult'tan ImageURL pasla'
+
+// MEDIUM PRIORITY TODOs
+// TODO: ERROR HANDLING --> handle throws which exist mostly in Search and Parsing classes by surrounding them with required catches and name exceptions' log in understandable manner.
+// TODO: Current radio buttons are literally suck so try to build a drop menu or some nice shit
+// TODO: Currently, every Parsing class function behaves every JSON data as they consist exact 50 items which is not true and causes crash when there is less than 50... Related->Also searches are done with &limit=50 query
+
+// LOW PRIORITY TODOs
+// TODO: editText in MainActivity is useless for now and button click sends specific data of strings to other activities. This should stay like this cuz of testing reasons. keyboard doesnt work on emu fucking google .!.
+// TODO: Current Search class functions search in all countries. Searches need to be restricted to only Turkey
+// TODO: myresult class' name might be changed into ArtistResult but not urgent and necessary
+//
+
 public class MainActivity extends AppCompatActivity implements
         SpotifyPlayer.NotificationCallback, ConnectionStateCallback
 {
     String result = null;
     String result2 = "";
-    // TODO: Replace with your client ID
+    //
     private static final String CLIENT_ID = "8d37a54bb27f446c915f3395cc1c9f4c";
-    // TODO: Replace with your redirect URI
+    //
     private static final String REDIRECT_URI = "mycustomprotocol://callback";
     private static final String CLIENT_SECRET = "1e848a4467654d7292ae9a7c4858df5b";
     EditText searchText;
     String searchWord;
-
+    RadioButton artistButton;
+    RadioButton albumButton;
+    RadioButton trackButton;
     private Player mPlayer;
     String token = "";
     String kod = "";
@@ -76,6 +94,9 @@ public class MainActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         searchText = (EditText) findViewById(R.id.editText);
+        artistButton = (RadioButton) findViewById(R.id.artistButton);
+        albumButton = (RadioButton) findViewById(R.id.albumButton);
+        trackButton = (RadioButton) findViewById(R.id.trackButton);
 
 
 
@@ -86,6 +107,10 @@ public class MainActivity extends AppCompatActivity implements
                 new onButtonClick().execute();
             }
         });
+
+
+        //firebase trials
+
     }
 
     //this class is executed instead of class below
@@ -97,23 +122,78 @@ public class MainActivity extends AppCompatActivity implements
 
         @Override
         protected Void doInBackground(Void... param){
+
             Login log = new Login();
             try {
                 token = log.getToken();
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            // TODO: localhost connection (works like charm)
+            /*
+            try {
+                BufferedReader in = null;
+                URL burl = new URL("http://10.0.2.2:3000/ref");
+                HttpURLConnection urlConnection = (HttpURLConnection) burl.openConnection();
+                String result = "";
+                urlConnection.setDoInput(true);
+                urlConnection.setDoOutput(false);
+                urlConnection.connect();
+                Log.e("tag", "tag");
+                in = new BufferedReader(new InputStreamReader(
+                        urlConnection.getInputStream()));
+
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = in.readLine()) != null)
+                    sb.append(line + "\n");
+
+
+                result = sb.toString();
+                System.out.println(result);
+            } catch (MalformedURLException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            */
+
             return null;
         }
 
         @Override
         protected void onPostExecute(Void param){
             //searchWord = searchText.getText().toString();  //This will be handled later
+            /*
+            // translating to another intent
             searchWord = "Machine";
             Intent nextScreen = new Intent(MainActivity.this, myresult.class);
             nextScreen.putExtra("token",token);
             nextScreen.putExtra("search", searchWord);
             startActivity(nextScreen);
+            */
+
+            if(artistButton.isChecked()){
+                Intent nextScreen = new Intent(MainActivity.this, myresult.class);
+                nextScreen.putExtra("token",token);
+                nextScreen.putExtra("search", "machine");
+                startActivity(nextScreen);
+            }
+            else if(albumButton.isChecked()){
+                Intent nextScreen = new Intent(MainActivity.this, AlbumResult.class);
+                nextScreen.putExtra("token",token);
+                nextScreen.putExtra("search", "Communion");
+                nextScreen.putExtra("searchType", "album");
+                startActivity(nextScreen);
+            }
+            else if(trackButton.isChecked()){
+                Intent nextScreen = new Intent(MainActivity.this, TrackResult.class);
+                nextScreen.putExtra("token",token);
+                nextScreen.putExtra("search", "now we die");
+                nextScreen.putExtra("searchType", "track");
+                startActivity(nextScreen);
+            }
         }
     }
 

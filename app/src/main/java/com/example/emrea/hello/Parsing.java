@@ -1,5 +1,7 @@
 package com.example.emrea.hello;
 
+import android.util.Log;
+
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -181,5 +183,117 @@ public class Parsing {
         }
 
         return albumID;
+    }
+
+    String[] getTrackImageURLOfTrackSearch (String result){
+        String[] trackImageURL = null;
+        try{
+            int total = 0;
+            JSONObject jsonresult = new JSONObject(result);
+            total = jsonresult
+                    .getJSONObject("tracks")
+                    .getInt("total");
+            trackImageURL = new String[50];
+            for (int i = 0; i < 50; i++){
+                int arr = jsonresult
+                        .getJSONObject("tracks")
+                        .getJSONArray("items")
+                        .getJSONObject(i)
+                        .getJSONObject("album")
+                        .getJSONArray("images")
+                        .length();
+                if (arr > 0){
+                    trackImageURL[i] = jsonresult
+                            .getJSONObject("tracks")
+                            .getJSONArray("items")
+                            .getJSONObject(i)
+                            .getJSONObject("album")
+                            .getJSONArray("images")
+                            .getJSONObject(arr - 1)
+                            .getString("url");
+                }
+                else  { trackImageURL[i] = null; }
+            }
+
+        } catch (JSONException e) {
+            Log.e("empty", "null JSON Object or result");
+        }
+        return trackImageURL;
+    }
+
+    String[] getTrackNameOfTrackSearch (String result) {
+        String[] trackName = null;
+        try {
+            int total = 0;
+            JSONObject jsonresult = new JSONObject(result);
+            total = jsonresult
+                    .getJSONObject("tracks")
+                    .getInt("total");
+            trackName = new String[50];
+            for (int i = 0; i < 50; i++) {
+                trackName[i] = jsonresult
+                        .getJSONObject("tracks")
+                        .getJSONArray("items")
+                        .getJSONObject(i)
+                        .getString("name");
+            }
+
+        } catch (JSONException e) {
+            Log.e("empty", "null JSON Object or result");
+        }
+        return trackName;
+    }
+
+    String[] getTrackIDOfTrackSearch (String result) {
+        String[] trackName = null;
+        try {
+            int total = 0;
+            JSONObject jsonresult = new JSONObject(result);
+            total = jsonresult
+                    .getJSONObject("tracks")
+                    .getInt("total");
+            trackName = new String[50];
+            for (int i = 0; i < 50; i++) {
+                trackName[i] = jsonresult
+                        .getJSONObject("tracks")
+                        .getJSONArray("items")
+                        .getJSONObject(i)
+                        .getString("id");
+            }
+
+        } catch (JSONException e) {
+            Log.e("empty", "null JSON Object or result");
+        }
+        return trackName;
+    }
+
+    String[] getTrackNameOfTrackSearchviaAlbumID (String result) throws JSONException {
+        int total = 0;
+        JSONObject jsonresult = new JSONObject(result);
+        total = jsonresult
+                .getInt("total");
+        String[] trackname = new String[total];
+        for (int i = 0; i < total; i++){
+            trackname[i] = jsonresult
+                    .getJSONArray("items")
+                    .getJSONObject(i)
+                    .getString("name");
+        }
+        return trackname;
+    }
+
+    String[] getAlbumIDOfAlbumSearchviaArtistID (String result) throws JSONException {
+        int total = 0;
+        JSONObject jsonresult = new JSONObject(result);
+        total = jsonresult
+                .getInt("total");
+        String[] trackID = new String[50];
+        for (int i = 0; i < 50; i++){
+            trackID[i] = jsonresult
+                    .getJSONArray("items")
+                    .getJSONObject(i)
+                    .getString("id");
+        }
+        return trackID;
     }
 }
