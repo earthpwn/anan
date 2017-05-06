@@ -31,48 +31,39 @@ public class TrackResult extends AppCompatActivity {
         @Override
         protected Void doInBackground(Void... param) {
 
-            try {
-                //get passed variables
-                Intent in = getIntent();
-                String searchType = in.getStringExtra("searchType");
+            //get passed variables
+            Intent in = getIntent();
+            String searchType = in.getStringExtra("searchType");
 
-                token = in.getStringExtra("token");
-                imageurl[0] = "https://i.scdn.co/image/85236cc12312fac9405206c25bd38479e63a04d6";
-                //String imageurl = in.getStringExtra("imageURL");
-                // TODO: AlbumResult'tan ImageURL pasla
+            token = in.getStringExtra("token");
+            imageurl[0] = "https://i.scdn.co/image/85236cc12312fac9405206c25bd38479e63a04d6";
+            //String imageurl = in.getStringExtra("imageURL");
+            // TODO: AlbumResult'tan ImageURL pasla
 
-                // Is a track searched from MainActivity ?
-                if(searchType.matches("track")){
-                    String keyWord = in.getStringExtra("search");
-                    //do search
-                    String result = "";
-                    Search newSearch = new Search();
-                    result = newSearch.searchTrack(token, keyWord);
+            // Is a track searched from MainActivity ?
+            if(searchType.matches("track")){
+                String keyWord = in.getStringExtra("search");
+                //do search
+                String result = "";
+                Search newSearch = new Search();
+                result = newSearch.searchTrack(token, keyWord);
 
-                    //Parse result
-                    Parsing parser = new Parsing();
-                    trackname = parser.getTrackNameOfTrackSearch(result);
-                }
-                // or an album's tracks need to be listed ?
-                else{
-                    String trackid = in.getStringExtra("id");
-                    //do search
-                    String result = "";
-                    Search newSearch = new Search();
-                    result = newSearch.getTrackOfArtistviaAlbumID(token, trackid);
-
-                    //Parse result
-                    Parsing parser = new Parsing();
-                    trackname = parser.getTrackNameOfTrackSearchviaAlbumID(result);
-                }
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
+                //Parse result
+                Parsing parser = new Parsing();
+                trackname = parser.getTrackNameOfTrackSearch(result);
             }
+            // or an album's tracks need to be listed ?
+            else{
+                String trackid = in.getStringExtra("id");
+                //do search
+                String result = "";
+                Search newSearch = new Search();
+                result = newSearch.getTrackOfArtistviaAlbumID(token, trackid);
 
+                //Parse result
+                Parsing parser = new Parsing();
+                trackname = parser.getTrackNameOfTrackSearchviaAlbumID(result);
+            }
             return null;
         }
         @Override

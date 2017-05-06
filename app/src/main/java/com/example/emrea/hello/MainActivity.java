@@ -58,7 +58,6 @@ import com.spotify.sdk.android.player.SpotifyPlayer;
 // TODO: Images of tracks are not displayed. This is an repentance todo from TrackResult class. 'AlbumResult'tan ImageURL pasla'
 
 // MEDIUM PRIORITY TODOs
-// TODO: ERROR HANDLING --> handle throws which exist mostly in Search and Parsing classes by surrounding them with required catches and name exceptions' log in understandable manner.
 // TODO: Current radio buttons are literally suck so try to build a drop menu or some nice shit
 // TODO: Currently, every Parsing class function behaves every JSON data as they consist exact 50 items which is not true and causes crash when there is less than 50... Related->Also searches are done with &limit=50 query
 
@@ -124,11 +123,8 @@ public class MainActivity extends AppCompatActivity implements
         protected Void doInBackground(Void... param){
 
             Login log = new Login();
-            try {
-                token = log.getToken();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            token = log.getToken();
+
 
             // TODO: localhost connection (works like charm)
             /*
@@ -214,17 +210,12 @@ public class MainActivity extends AppCompatActivity implements
         protected Void doInBackground(Void... strings) {
             // Do some validation here
             Login log = new Login();
-            try {
-                token = log.getToken();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            token = log.getToken();
+
             Search mysearch = new Search();
-            try {
-                result = mysearch.searchArtist(token, "Machine");
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+
+            result = mysearch.searchArtist(token, "Machine");
+
 
             /*Intent nextScreen = new Intent(MainActivity.this, myresult.class);
             nextScreen.putExtra("result",result);

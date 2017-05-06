@@ -18,20 +18,20 @@ import java.net.URL;
  */
 
 public class Login {
-    String getToken() throws IOException {
+    String getToken() {
         String reftok = "AQCKkSAT5gRPFoNdxne3Hc3_BvR0rx9VlbRUJKIRFR17ITJj8zTdWS28KG2yAKpMlZpt_-PeWDzOJvXT6LT4Us5VHA8iK_knL27IRYR1rRMngNSR7ICd1IcKhDWEDd532e4";
         final String CLIENT_SECRET = "1e848a4467654d7292ae9a7c4858df5b";
         final String CLIENT_ID = "8d37a54bb27f446c915f3395cc1c9f4c";
         String token = "";
-        BufferedReader in = null;
-        URL url = new URL("https://accounts.spotify.com/api/token" +
-                "?grant_type=refresh_token" +
-                "&refresh_token=" + reftok +
-                "&client_id=" + CLIENT_ID+
-                "&client_secret=" + CLIENT_SECRET);
-        HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
-        try{
 
+        try{
+            BufferedReader in;
+            URL url = new URL("https://accounts.spotify.com/api/token" +
+                    "?grant_type=refresh_token" +
+                    "&refresh_token=" + reftok +
+                    "&client_id=" + CLIENT_ID+
+                    "&client_secret=" + CLIENT_SECRET);
+            HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
             String result = "";
             urlConnection.setDoInput(true);
             urlConnection.setDoOutput(true);
@@ -51,15 +51,13 @@ public class Login {
             token = jresult.getString("access_token");
             System.out.println (urlConnection.getResponseCode());
             System.out.println (urlConnection.getResponseMessage());
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+
+            in.close();
+            urlConnection.disconnect();
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
-        } finally{
-            in.close();
-            urlConnection.disconnect();
         }
         return token;
     }

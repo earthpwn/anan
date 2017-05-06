@@ -121,33 +121,23 @@ public class myresult extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... param){
-            try {
-                //get passed variables
-                Intent in = getIntent();
-                String searchWord = in.getStringExtra("search");
-                token = in.getStringExtra("token");
 
-                //do search
-                String result = "";
-                Search newSearch = new Search();
-                result = newSearch.searchArtist(token, searchWord);
+            //get passed variables
+            Intent in = getIntent();
+            String searchWord = in.getStringExtra("search");
+            token = in.getStringExtra("token");
 
+            //do search
+            String result = "";
+            Search newSearch = new Search();
+            result = newSearch.searchArtist(token, searchWord);
 
+            //Parse result
+            Parsing parser = new Parsing();
+            imageurl = parser.getImageURLOfArtistSearch(result);
+            artistname = parser.getArtistNameOfArtistSearch(result);
+            artistID = parser.getArtistIDOfArtistSearch(result);
 
-                //Parse result
-                Parsing parser = new Parsing();
-                imageurl = parser.getImageURLOfArtistSearch(result);
-                artistname = parser.getArtistNameOfArtistSearch(result);
-                artistID = parser.getArtistIDOfArtistSearch(result);
-
-
-
-//////
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
             return null;
         }
 

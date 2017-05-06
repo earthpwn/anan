@@ -34,51 +34,41 @@ public class AlbumResult extends AppCompatActivity {
 
         @Override
         protected Void doInBackground(Void... param){
-            try {
-                //get passed variables
-                Intent in = getIntent();
-                String searchType = in.getStringExtra("searchType");
-                token = in.getStringExtra("token");
-                // is an album searched from MainActivity ?
-                if(searchType.matches("album")){
-                    String searchWord = in.getStringExtra("search");
-                    //do search
-                    String result = "";
-                    Search newSearch = new Search();
-                    result = newSearch.searchAlbum(token, searchWord);
 
-                    //Parse result
-                    Parsing parser = new Parsing();
-                    imageurl = parser.getAlbumImageURLOfAlbumSearch(result);
-                    albumname = parser.getAlbumNameOfAlbumSearch(result);
-                    albumID = parser.getAlbumIDOfAlbumSearch(result);
-                }
-                // or albums of an artist need to be listed ?
-                else{
-                    String artistID = in.getStringExtra("id");
+            //get passed variables
+            Intent in = getIntent();
+            String searchType = in.getStringExtra("searchType");
+            token = in.getStringExtra("token");
+            // is an album searched from MainActivity ?
+            if(searchType.matches("album")){
+                String searchWord = in.getStringExtra("search");
+                //do search
+                String result = "";
+                Search newSearch = new Search();
+                result = newSearch.searchAlbum(token, searchWord);
 
-
-                    //do search
-                    String result = "";
-                    Search newSearch = new Search();
-                    result = newSearch.getAlbumOfArtist(token, artistID);
-
-                    //Parse result
-                    Parsing parser = new Parsing();
-                    imageurl = parser.getAlbumImageURLOfAlbumSearchviaArtistID(result);
-                    albumname = parser.getAlbumNameOfAlbumSearchviaArtistID(result);
-                    albumID = parser.getAlbumIDOfAlbumSearchviaArtistID(result);
-                }
-
-
-
-
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
+                //Parse result
+                Parsing parser = new Parsing();
+                imageurl = parser.getAlbumImageURLOfAlbumSearch(result);
+                albumname = parser.getAlbumNameOfAlbumSearch(result);
+                albumID = parser.getAlbumIDOfAlbumSearch(result);
             }
+            // or albums of an artist need to be listed ?
+            else{
+                String artistID = in.getStringExtra("id");
 
+
+                //do search
+                String result = "";
+                Search newSearch = new Search();
+                result = newSearch.getAlbumOfArtist(token, artistID);
+
+                //Parse result
+                Parsing parser = new Parsing();
+                imageurl = parser.getAlbumImageURLOfAlbumSearchviaArtistID(result);
+                albumname = parser.getAlbumNameOfAlbumSearchviaArtistID(result);
+                albumID = parser.getAlbumIDOfAlbumSearchviaArtistID(result);
+            }
             return null;
         }
 
