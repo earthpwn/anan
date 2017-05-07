@@ -350,4 +350,40 @@ public class Parsing {
         }
         return trackID;
     }
+
+    String[] getTrackIDOfTrackSearchviaAlbumID (String result) {
+        String[] trackID = null;
+        try {
+            int total = 0;
+            JSONObject jsonresult = null;
+            jsonresult = new JSONObject(result);
+            total = jsonresult
+                    .getInt("total");
+            trackID = new String[total];
+            for (int i = 0; i < total; i++){
+                trackID[i] = jsonresult
+                        .getJSONArray("items")
+                        .getJSONObject(i)
+                        .getString("id");
+            }
+        } catch (JSONException e) {
+            Log.e("empty", "JSON or its sub-branches given to parser is null");
+        }
+
+        return trackID;
+    }
+
+    int getNumberOfTracksOfAlbumviaAlbumID (String result){
+        int numberOfTracks = 0;
+        try {
+            JSONObject jsonresult = null;
+            jsonresult = new JSONObject(result);
+            numberOfTracks = jsonresult
+                    .getInt("total");
+        } catch (JSONException e) {
+            Log.e("empty", "JSON or its sub-branches given to parser is null");
+        }
+        return numberOfTracks;
+    }
+
 }

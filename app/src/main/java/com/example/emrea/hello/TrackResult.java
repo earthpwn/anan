@@ -4,6 +4,8 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
 import org.json.JSONException;
@@ -19,10 +21,14 @@ public class TrackResult extends AppCompatActivity {
         new TrackResults().execute();
     }
 
+    String token;
+    String idOfSelectedTrack;
+
     class TrackResults extends AsyncTask<Void, Void, Void> {
         String[] trackname = {};
-        String[] imageurl = new String[12];  // TODO: Initiate imageurl array as empty not 12 after todo below is done
-        String token;
+        String[] trackID = {};
+        String[] imageurl = {};
+
         @Override
         protected void onPreExecute(){
 
@@ -36,9 +42,6 @@ public class TrackResult extends AppCompatActivity {
             String searchType = in.getStringExtra("searchType");
 
             token = in.getStringExtra("token");
-            imageurl[0] = "https://i.scdn.co/image/85236cc12312fac9405206c25bd38479e63a04d6";
-            //String imageurl = in.getStringExtra("imageURL");
-            // TODO: AlbumResult'tan ImageURL pasla
 
             // Is a track searched from MainActivity ?
             if(searchType.matches("track")){
@@ -51,18 +54,26 @@ public class TrackResult extends AppCompatActivity {
                 //Parse result
                 Parsing parser = new Parsing();
                 trackname = parser.getTrackNameOfTrackSearch(result);
+                trackID = parser.getTrackIDOfTrackSearch(result);
+                imageurl = parser.getTrackImageURLOfTrackSearch(result);
             }
             // or an album's tracks need to be listed ?
             else{
-                String trackid = in.getStringExtra("id");
+                String albumID = in.getStringExtra("id");
                 //do search
                 String result = "";
                 Search newSearch = new Search();
-                result = newSearch.getTrackOfArtistviaAlbumID(token, trackid);
+                result = newSearch.getTrackOfArtistviaAlbumID(token, albumID);
 
                 //Parse result
                 Parsing parser = new Parsing();
                 trackname = parser.getTrackNameOfTrackSearchviaAlbumID(result);
+                trackID = parser.getTrackIDOfTrackSearchviaAlbumID(result);
+                int not = parser.getNumberOfTracksOfAlbumviaAlbumID(result);
+                imageurl = new String[not];
+                for(int i = 0; i < not; i++){
+                    imageurl[i] = in.getStringExtra("imageURL");
+                }
             }
             return null;
         }
@@ -73,6 +84,32 @@ public class TrackResult extends AppCompatActivity {
 
             ListView listView = (ListView) findViewById(R.id.liste);
             listView.setAdapter(adapter);
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                public void onItemClick(AdapterView parent, View v, int position, long id){
+                    idOfSelectedTrack = trackID[position];
+                    new AddTrack().execute();
+                }
+            });
+        }
+    }
+
+    class AddTrack extends AsyncTask<Void, Void, Void> {
+
+        @Override
+        protected void onPreExecute(){
+
+        }
+
+        @Override
+        protected Void doInBackground(Void... param) {
+            Playlist playlist = new Playlist();
+            playlist.addTrack(token, idOfSelectedTrack);
+
+            return null;
+        }
+        @Override
+        protected void onPostExecute(Void param){
+
         }
     }
 }

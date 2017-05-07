@@ -85,6 +85,7 @@ public class AlbumResult extends AppCompatActivity {
                     nextScreen.putExtra("token",token);
                     nextScreen.putExtra("searchType","id");
                     nextScreen.putExtra("id",albumID[position]);
+                    nextScreen.putExtra("imageURL", imageurl[position]);
                     startActivity(nextScreen);
                 }
             });

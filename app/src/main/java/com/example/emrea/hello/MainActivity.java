@@ -54,8 +54,10 @@ import com.spotify.sdk.android.player.Spotify;
 import com.spotify.sdk.android.player.SpotifyPlayer;
 
 // HIGH PRIORITY TODOs
-// TODO: Selected tracks is not added to playlist
-// TODO: Images of tracks are not displayed. This is an repentance todo from TrackResult class. 'AlbumResult'tan ImageURL pasla'
+// TODO: Selected tracks is now added to playlist. However they are appended to playlist. Selected tracks need to be added next to currently playing track.
+
+// Back-end TODOs
+// TODO: Added tracks need to be removed after they are done playing.
 
 // MEDIUM PRIORITY TODOs
 // TODO: Current radio buttons are literally suck so try to build a drop menu or some nice shit
